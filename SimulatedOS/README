@@ -1,0 +1,17 @@
+Only first 2 phases are done.
+
+I attached a Design Document.
+
+Please fetch the make file to run the program
+
+I also attached 4 sample files and a config.sys file.
+
+To run type : make and then ./simos.exe
+
+Please ignore the warnings.
+
+Please change the 1st entry in config file to 0 or 1 to observe a different output.
+
+Note : Please compile a couple of times before running.
+
+Also, Idle process has a fixed frame value as 5 Bytes. So, please do not give more than 1 frame for Idle prcess. 

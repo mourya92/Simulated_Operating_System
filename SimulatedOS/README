@@ -1,17 +1,99 @@
-Only first 2 phases are done.
+We simulate shell command processing in command.c. User can issue commands to the system and the command processing component simply process the command by calling corresponding OS functions. 
 
-I attached a Design Document.
+Available commands to the system are listed: 
 
-Please fetch the make file to run the program
+Action Parameters System actions
 
-I also attached 4 sample files and a config.sys file.
+T - Terminate the entire system
 
-To run type : make and then ./simos.exe
+s (submit) fnum New process submitted, the program is in “prog<fnum>”
 
-Please ignore the warnings.
+x (execute) - Execute a program from ready queue for one time quantum
 
-Please change the 1st entry in config file to 0 or 1 to observe a different output.
+r (register) - Dump registers
 
-Note : Please compile a couple of times before running.
+q (queue) - Dump ready queue and list of processes completed IO
 
-Also, Idle process has a fixed frame value as 5 Bytes. So, please do not give more than 1 frame for Idle prcess. 
+p (PCB) - Dump PCB for every process
+
+e (timer events) - Dump timer event list
+
+m (memory) - Dump memory related information
+
+w (swap space) - Dump the swap space related information
+
+l (spool) - Dump the spool space related information
+
+ 					****************
+
+A system configuration file “config.sys” should be used to set the configuration of the system. The
+
+content of the configuration file is given in the following. The configuration parameters are defined in 
+
+simos.h and read in command.c in the initialize_system function.
+
+<observation mode>
+
+-- if the observation mode is 1, it is on, more information should be printed;
+
+ -- otherwise, it is 0, and the observation mode is off
+
+<quantum> <idle-quantum>
+
+-- <quantum>: time quantum, given as number of instructions
+
+-- <idle-quantum>: time quantum for the idle process, cloud be less than <quantum>
+
+<page size> <total memory size> <swap space size> <OS size>
+
+-- page size is the size of each page in physical memory
+
+-- OS size is the size of the address space of the OS which has to stay permanently in memory
+
+ -- all these sizes are in number of words
+
+<age scan period>
+
+-- specify the period in number of instruction cycles for the system to perform aging vector scan
+
+<spool space size per process in bytes> 
+
+The system let you issue commands like a system administrator. The list of commands has been given in 
+
+Table 4. One command is to submit programs and the program will be loaded to the system. The program is 
+
+in a simulated assembly language. The format for a program is specified as follows.
+
+<memory size> N M
+
+ -- memory size is the size of the memory the program requests, since we do not have
+
+ instructions to allocate dynamic memory, the memory size for each program is fixed
+
+ -- N is the number of instructions in the program
+
+ -- M is the number of static data in the program
+
+<instructions>
+
+ -- following the first line, there should be N lines of instructions
+
+ each instruction should have an opcode and an operand, both are integers in one line
+
+ the last instruction should always be end-program, with a dummy operand
+
+ the descriptions for opcode and operand are given in Table 1
+
+<data>
+
+ -- following the instructions are N lines of data, initialized in the program file
+
+ every data should be initialized, for those without initial value, set it to 0 anyway
+
+					****************
+To run type :  make
+	      ./simos.exe
+
+Change the 1st entry in config.sys to 0 or 1 to observe a different output.
+
+Also, Idle process has a fixed frame value as 5 Bytes. So, do not give more than 1 frame for Idle process. 
